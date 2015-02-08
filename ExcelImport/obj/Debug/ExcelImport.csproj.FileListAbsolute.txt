@@ -10,3 +10,9 @@ C:\Darco\Projects\Tim Systems\Delta\ExcelImport\DeltaBI.ExcelImport\ExcelImport\
 C:\Darco\Projects\GitHub\TimSystems\delta-bi-excel-import\ExcelImport\bin\Debug\ExcelImport.exe.config
 C:\Darco\Projects\GitHub\TimSystems\delta-bi-excel-import\ExcelImport\obj\Debug\ExcelImport.exe
 C:\Darco\Projects\GitHub\TimSystems\delta-bi-excel-import\ExcelImport\obj\Debug\ExcelImport.pdb
+C:\Darco\Projects\GitHub\TimSystems\delta-bi-excel-import\ExcelImport\bin\Debug\ExcelImport.exe
+C:\Darco\Projects\GitHub\TimSystems\delta-bi-excel-import\ExcelImport\bin\Debug\ExcelImport.pdb
+C:\Darco\Projects\GitHub\TimSystems\delta-bi-excel-import\ExcelImport\obj\Debug\ExcelImport.csprojResolveAssemblyReference.cache
+C:\Darco\Projects\GitHub\TimSystems\delta-bi-excel-import\ExcelImport\obj\Debug\ExcelImport.MainForm.resources
+C:\Darco\Projects\GitHub\TimSystems\delta-bi-excel-import\ExcelImport\obj\Debug\ExcelImport.Properties.Resources.resources
+C:\Darco\Projects\GitHub\TimSystems\delta-bi-excel-import\ExcelImport\obj\Debug\ExcelImport.csproj.GenerateResource.Cache

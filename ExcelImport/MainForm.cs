@@ -41,7 +41,7 @@ namespace ExcelImport
 			Microsoft.SqlServer.Dts.Runtime.Application app = new Microsoft.SqlServer.Dts.Runtime.Application();
 			Package package = app.LoadPackage(packageLocation, pe);
 			//package.PackagePassword = "hitachi";
-			package.Variables["User::ExcelFilePath"].Value = this.txtPath.Text;
+			package.Variables["User::varExcelFilePath"].Value = this.txtPath.Text;
 
 			DTSExecResult result = package.Execute();
 

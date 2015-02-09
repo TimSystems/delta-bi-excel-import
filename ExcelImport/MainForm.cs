@@ -10,21 +10,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-//using Microsoft.SqlServer.Dts.Runtime;
+using System.IO;
 using Microsoft.SqlServer.Management.IntegrationServices;
 
 namespace ExcelImport
 {
 	public partial class MainForm : Form
 	{
+		public enum ExcelFileType
+		{
+			Fedra,
+			Adecco,
+			Youth,
+			ManualEntry,
+			Unspecified
+		}
+
+		private ExcelFileType excelFileType;
+
 		public MainForm()
 		{
 			InitializeComponent();
-		}
-
-		private void btnCancel_Click(object sender, EventArgs e)
-		{
-			
 		}
 
 		private void btnSelectPath_Click(object sender, EventArgs e)
@@ -33,11 +39,68 @@ namespace ExcelImport
 			if (result == DialogResult.OK)
 			{
 				this.txtPath.Text = dlgSelectFile.FileName;
+
+				string fileName = Path.GetFileNameWithoutExtension(this.txtPath.Text).ToLower();
+				string fileExt = Path.GetExtension(this.txtPath.Text).ToLower();
+
+				if (fileName.Contains("fedra"))
+				{
+					this.excelFileType = ExcelFileType.Fedra;
+					this.rbFedra.Checked = true;
+				}
+				else if (fileName.Contains("adecco"))
+				{
+					this.excelFileType = ExcelFileType.Adecco;
+					this.rbAdecco.Checked = true;
+				}
+				else if (fileName.Contains("omladinci"))
+				{
+					this.excelFileType = ExcelFileType.Youth;
+					this.rbYouth.Checked = true;
+				}
+				else if (fileName.Contains("unos") || fileName.Contains("rucni"))
+				{
+					this.excelFileType = ExcelFileType.ManualEntry;
+					this.rbAdditionalData.Checked = true;
+				}
+				else
+				{
+					this.excelFileType = ExcelFileType.Unspecified;
+				}
+
+				if (this.excelFileType == ExcelFileType.Unspecified)
+				{
+					MessageBox.Show("Excel fajl nije ispravan!\nExcel fajl u nazivu mora imati oznaku za tip unosa (npr. 'fedra', 'adecco', 'omladinci' ili 'rucni unos')");
+					ClearAll();
+					return;
+				}
+
+				if (fileExt != ".xlsx")
+				{
+					MessageBox.Show("Morate izabrati Excel fajl (nastavak '.xlsx')!");
+					ClearAll();
+					return;
+				}
 			}
+		}
+
+		private void ClearAll()
+		{
+			this.rbAdditionalData.Checked = false;
+			this.rbAdecco.Checked = false;
+			this.rbFedra.Checked = false;
+			this.rbYouth.Checked = false;
+			this.txtPath.Text = string.Empty;
 		}
 
 		private void btnLoad_Click(object sender, EventArgs e)
 		{
+			if (string.IsNullOrEmpty(this.txtPath.Text))
+			{
+				MessageBox.Show("Morate izabrati Excel fajl!");
+				return;
+			}
+
 			// get Integration Services connection string from config file
 			string connStr = ConfigurationManager.ConnectionStrings["IntegrationServicesConnectionString"].ToString();
 
@@ -46,7 +109,28 @@ namespace ExcelImport
 
 			if (integrationServices != null)
 			{
-				var package = integrationServices.Catalogs["SSISDB"].Folders["DeltaBI-Excel"].Projects["DeltaBI.ExcelFiles"].Packages["ExcelYouth.dtsx"];
+				string packageName = string.Empty;
+				
+				switch(this.excelFileType)
+				{
+					case ExcelFileType.Adecco:
+						packageName = "ExcelAdecco.dtsx";
+						break;
+
+					case ExcelFileType.Fedra:
+						packageName = "ExcelFedra.dtsx";
+						break;
+
+					case ExcelFileType.Youth:
+						packageName = "ExcelYouth.dtsx";
+						break;
+
+					case ExcelFileType.ManualEntry:
+						packageName = "ExcelManualEntry.dtsx";
+						break;
+				}
+
+				var package = integrationServices.Catalogs["SSISDB"].Folders["DeltaBI-Excel"].Projects["DeltaBI.ExcelFiles"].Packages[packageName];
 
 				// update Excel file connection string accordingly
 				// { Provider=Microsoft.ACE.OLEDB.12.0;Data Source=[ Excel_file_path ];Extended Properties="EXCEL 12.0 XML;HDR=NO"; }

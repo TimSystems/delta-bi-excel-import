@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.SqlServer.Dts.Runtime;
+//using Microsoft.SqlServer.Dts.Runtime;
+using Microsoft.SqlServer.Management.IntegrationServices;
 
 namespace ExcelImport
 {
@@ -34,18 +38,52 @@ namespace ExcelImport
 
 		private void btnLoad_Click(object sender, EventArgs e)
 		{
-			string packageLocation = @"D:\Temp\Packages\ExcelYouth.dtsx";
+			// get Integration Services connection string from config file
+			string connStr = ConfigurationManager.ConnectionStrings["IntegrationServicesConnectionString"].ToString();
 
-			PackageEvents pe = new PackageEvents();
+			var connection = new SqlConnection(connStr);
+			var integrationServices = new IntegrationServices(connection);
 
-			Microsoft.SqlServer.Dts.Runtime.Application app = new Microsoft.SqlServer.Dts.Runtime.Application();
-			Package package = app.LoadPackage(packageLocation, pe);
-			//package.PackagePassword = "hitachi";
-			package.Variables["User::varExcelFilePath"].Value = this.txtPath.Text;
+			if (integrationServices != null)
+			{
+				var package = integrationServices.Catalogs["SSISDB"].Folders["DeltaBI-Excel"].Projects["DeltaBI.ExcelFiles"].Packages["ExcelYouth.dtsx"];
 
-			DTSExecResult result = package.Execute();
+				// update Excel file connection string accordingly
+				// { Provider=Microsoft.ACE.OLEDB.12.0;Data Source=[ Excel_file_path ];Extended Properties="EXCEL 12.0 XML;HDR=NO"; }
+				string excelFileConnStr = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"EXCEL 12.0 XML;HDR=NO\";", this.txtPath.Text);
 
-			//MessageBox.Show(result.ToString());
+				package.Parameters["CM.Excel Connection - header.ConnectionString"].Set(ParameterInfo.ParameterValueType.Literal, excelFileConnStr);
+				package.Parameters["CM.Excel Connection - rows.ConnectionString"].Set(ParameterInfo.ParameterValueType.Literal, excelFileConnStr);
+
+				// this makes the package execution synchronous (otherwise, it would be asynchronous)
+				var setValueParameters = new Collection<PackageInfo.ExecutionValueParameterSet>();
+				setValueParameters.Add(new PackageInfo.ExecutionValueParameterSet
+				{
+					ObjectType = 50,
+					ParameterName = "SYNCHRONIZED",
+					ParameterValue = 1
+				});
+
+				long executionIdentifier = package.Execute(false, null, setValueParameters);
+
+				var execution = integrationServices.Catalogs.Single(x => x.Name.Equals("SSISDB")).Executions.Single(x => x.Id.Equals(executionIdentifier));
+				
+				var errors = execution.Messages.Where(m => m.MessageType == 120).Select(m => m.Message);
+				var warnings = execution.Messages.Where(m => m.MessageType == 110).Select(m => m.Message);
+
+				if (errors.Count() > 0)
+				{
+					MessageBox.Show("Došlo je do greške prilikom upisa podataka. Podaci nisu upisani!");
+				}
+				else
+				{
+					MessageBox.Show("Podaci su uspešno upisani.");
+				}
+			}
+			else
+			{
+				MessageBox.Show("Servis 'SQL Server Integration Services' nije dostupan!");
+			}
 		}
 	}
 }

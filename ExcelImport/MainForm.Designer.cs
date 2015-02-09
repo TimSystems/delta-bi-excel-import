@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.txtPath = new System.Windows.Forms.TextBox();
 			this.btnSelectPath = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -38,7 +39,9 @@
 			this.btnLoad = new System.Windows.Forms.Button();
 			this.dlgSelectFile = new System.Windows.Forms.OpenFileDialog();
 			this.btnClose = new System.Windows.Forms.Button();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.groupBox1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// txtPath
@@ -139,22 +142,35 @@
 			this.btnClose.UseVisualStyleBackColor = true;
 			this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
 			// 
+			// pictureBox1
+			// 
+			this.pictureBox1.Image = global::ExcelImport.Properties.Resources.excelicon;
+			this.pictureBox1.Location = new System.Drawing.Point(685, 59);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(74, 72);
+			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pictureBox1.TabIndex = 5;
+			this.pictureBox1.TabStop = false;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(775, 204);
+			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.btnClose);
 			this.Controls.Add(this.btnLoad);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.btnSelectPath);
 			this.Controls.Add(this.txtPath);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "DeltaBI Excel Import";
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -172,6 +188,7 @@
 		private System.Windows.Forms.Button btnLoad;
 		private System.Windows.Forms.OpenFileDialog dlgSelectFile;
 		private System.Windows.Forms.Button btnClose;
+		private System.Windows.Forms.PictureBox pictureBox1;
 	}
 }
 

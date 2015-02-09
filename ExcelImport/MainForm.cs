@@ -157,6 +157,8 @@ namespace ExcelImport
 
 				if (errors.Count() > 0)
 				{
+					InsertLogEntry(errors, excelFileConnStr);
+
 					MessageBox.Show("Došlo je do greške prilikom upisa podataka. Podaci nisu upisani!");
 				}
 				else
@@ -168,6 +170,31 @@ namespace ExcelImport
 			{
 				MessageBox.Show("Servis 'SQL Server Integration Services' nije dostupan!");
 			}
+		}
+
+		private void InsertLogEntry(IEnumerable<string> errors, string excelFileConnStr)
+		{
+			TextWriter tw = new StreamWriter("delta-bi-excel-files.log", true);
+
+			tw.WriteLine("====================================================================================================");
+			tw.WriteLine(DateTime.Now);
+			tw.WriteLine(excelFileConnStr);
+			tw.WriteLine("====================================================================================================");
+
+			foreach (string error in errors)
+			{
+				tw.WriteLine();
+				tw.WriteLine("ERROR");
+				tw.WriteLine(error);
+				tw.WriteLine();
+			}
+
+			tw.Close();
+		}
+
+		private void btnClose_Click(object sender, EventArgs e)
+		{
+			this.Close();
 		}
 	}
 }

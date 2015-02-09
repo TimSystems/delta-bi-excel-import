@@ -37,6 +37,7 @@
 			this.rbYouth = new System.Windows.Forms.RadioButton();
 			this.btnLoad = new System.Windows.Forms.Button();
 			this.dlgSelectFile = new System.Windows.Forms.OpenFileDialog();
+			this.btnClose = new System.Windows.Forms.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -73,6 +74,7 @@
 			// rbAdditionalData
 			// 
 			this.rbAdditionalData.AutoSize = true;
+			this.rbAdditionalData.Enabled = false;
 			this.rbAdditionalData.Location = new System.Drawing.Point(213, 31);
 			this.rbAdditionalData.Name = "rbAdditionalData";
 			this.rbAdditionalData.Size = new System.Drawing.Size(97, 17);
@@ -84,6 +86,7 @@
 			// rbAdecco
 			// 
 			this.rbAdecco.AutoSize = true;
+			this.rbAdecco.Enabled = false;
 			this.rbAdecco.Location = new System.Drawing.Point(144, 31);
 			this.rbAdecco.Name = "rbAdecco";
 			this.rbAdecco.Size = new System.Drawing.Size(62, 17);
@@ -95,6 +98,7 @@
 			// rbFedra
 			// 
 			this.rbFedra.AutoSize = true;
+			this.rbFedra.Enabled = false;
 			this.rbFedra.Location = new System.Drawing.Point(85, 31);
 			this.rbFedra.Name = "rbFedra";
 			this.rbFedra.Size = new System.Drawing.Size(52, 17);
@@ -106,6 +110,7 @@
 			// rbYouth
 			// 
 			this.rbYouth.AutoSize = true;
+			this.rbYouth.Enabled = false;
 			this.rbYouth.Location = new System.Drawing.Point(7, 31);
 			this.rbYouth.Name = "rbYouth";
 			this.rbYouth.Size = new System.Drawing.Size(71, 17);
@@ -124,11 +129,22 @@
 			this.btnLoad.UseVisualStyleBackColor = true;
 			this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
 			// 
+			// btnClose
+			// 
+			this.btnClose.Location = new System.Drawing.Point(683, 155);
+			this.btnClose.Name = "btnClose";
+			this.btnClose.Size = new System.Drawing.Size(75, 23);
+			this.btnClose.TabIndex = 4;
+			this.btnClose.Text = "Zatvori";
+			this.btnClose.UseVisualStyleBackColor = true;
+			this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(775, 204);
+			this.Controls.Add(this.btnClose);
 			this.Controls.Add(this.btnLoad);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.btnSelectPath);
@@ -155,6 +171,7 @@
 		private System.Windows.Forms.RadioButton rbYouth;
 		private System.Windows.Forms.Button btnLoad;
 		private System.Windows.Forms.OpenFileDialog dlgSelectFile;
+		private System.Windows.Forms.Button btnClose;
 	}
 }
 
